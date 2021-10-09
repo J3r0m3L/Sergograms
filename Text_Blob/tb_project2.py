@@ -2,7 +2,7 @@ import re
 from collections import Counter
 from sklearn.svm import LinearSVC
 
-#turns text file into array: data
+#train model
 def parse_data(file):
     data = []
     with open(file, 'r') as f:
@@ -38,38 +38,44 @@ def convert_label(item, name):
             label += name[idx] + " "
     return label.strip()
 
-file = 'training.txt'
-data = parse_data(file)
+def train_model():
+    file = 'training.txt'
+    data = parse_data(file)
 
-emotions = ["joy", 'fear', "anger", "sadness", "disgust", "shame", "guilt"]
-x_all = []
-y_all = []
+    emotions = ["joy", 'fear', "anger", "sadness", "disgust", "shame", "guilt"]
+    x_all = []
+    y_all = []
 
-for label, text in data:
-    y_all.append(convert_label(label, emotions))
-    x_all.append(create_feature(text, nrange=(1, 4)))
+    for label, text in data:
+        y_all.append(convert_label(label, emotions))
+        x_all.append(create_feature(text, nrange=(1, 4)))
 
-from sklearn.feature_extraction import DictVectorizer
-vectorizer = DictVectorizer(sparse = True)
-x_all = vectorizer.fit_transform(x_all)
+    from sklearn.feature_extraction import DictVectorizer
+    vectorizer = DictVectorizer(sparse = True)
+    x_all = vectorizer.fit_transform(x_all)
 
-lsvc = LinearSVC(random_state=123)
+    lsvc = LinearSVC(random_state=123)
 
-lsvc.fit(x_all, y_all)
-emotions.sort()
-label_freq = {}
-for label, _ in data: 
-    label_freq[label] = label_freq.get(label, 0) + 1
+    lsvc.fit(x_all, y_all)
+    return [vectorizer, lsvc]
 
-emoji_dict = {"joy":"😂", "fear":"😱", "anger":"😠", "sadness":"😢", "disgust":"😒", "shame":"😳", "guilt":"😳"}
-t1 = "This looks so impressive"
-t2 = "I have a fear of dogs"
-t3 = "My dog died yesterday"
-t4 = "I don't love you anymore..!"
+# utilize model
+def main():
+    trained = train_model()
 
-texts = [t1, t2, t3, t4]
-for text in texts: 
-    features = create_feature(text, nrange=(1, 4))
-    features = vectorizer.transform(features)
-    prediction = lsvc.predict(features)[0]
-    print( text,emoji_dict[prediction])
+    emoji_dict = {"joy":"😂", "fear":"😱", "anger":"😠", "sadness":"😢", "disgust":"😒", "shame":"😳", "guilt":"😳"}
+    t1 = "This looks so impressive"
+    t2 = "I have a fear of dogs"
+    t3 = "My dog died yesterday"
+    t4 = "I don't love you anymore..!"
+
+    texts = [t1, t2, t3, t4]
+    for text in texts: 
+        features = create_feature(text, nrange=(1, 4))
+        features = trained[0].transform(features)
+        prediction = trained[1].predict(features)[0]
+        # features = vectorizer.transform(features)
+        # prediction = lsvc.predict(features)[0]
+        print( text,emoji_dict[prediction])
+
+main()
