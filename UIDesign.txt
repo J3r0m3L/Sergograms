@@ -1,0 +1,9 @@
+-Status 'active'/'non-active'/'error'                              toggle( )
+press ctrl + alt delete to activate the program
+
+history:
+-> Messenger | Message: 'Hello Caitlyn nice to meet you'  emoji 
+-> Messenger | Message: 'Hello Caitlyn nice to meet you'  emoji 
+-> Messenger | Message: 'Hello Caitlyn nice to meet you'  emoji 
+-> Messenger | Message: 'Hello Caitlyn nice to meet you'  emoji 
+-> Messenger | Message: 'Hello Caitlyn nice to meet you'  emoji 
