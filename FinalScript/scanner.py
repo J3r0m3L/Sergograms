@@ -1,4 +1,3 @@
-import joblib
 import numpy as nm
 import pytesseract
 import cv2
@@ -7,7 +6,7 @@ import keyboard
 import time
 import re
 from collections import Counter
-
+import joblib
 
 def main():
     with mss.mss() as sct:
@@ -23,9 +22,9 @@ def main():
         # loop begins
         while(True):
             # prevents the output of / key due to its function as a toggle button
-            keyboard.block_key('/')
+            # keyboard.block_key('/')
             # toggle says go
-            if keyboard.is_pressed('/'):
+            if keyboard.is_pressed('ctrl+enter'):
                 # benchmark time after keypress
                 start_time = time.time()
                 # default discord text area
@@ -53,6 +52,23 @@ def main():
                 # prints text, emoji, time taken
                 print(txtstr, emoji_dict[prediction], 'The loop took: {0}'.format(
                     time.time()-start_time))
+                # put the emoji into your chat along with a spacer character.
+                keyboard.press('space')
+                if prediction == 'joy':
+                    keyboard.write('😂')
+                elif prediction == 'fear':
+                    keyboard.write('😱')
+                elif prediction == 'anger':
+                    keyboard.write('😠')
+                elif prediction == 'sadness':
+                    keyboard.write('😢')
+                elif prediction == 'disgust':
+                    keyboard.write('😒')
+                elif prediction == 'shame':
+                    keyboard.write('😳')
+                elif prediction == 'guilt':
+                    keyboard.write('😳')
+
 
 # helpermethod for tokenization
 def ngram(token, n):
@@ -61,6 +77,7 @@ def ngram(token, n):
         ngram = ' '.join(token[i-n+1:i+1])
         output.append(ngram)
     return output
+
 
 # helper method for sentiment analysis
 def create_feature(text, nrange=(1, 1)):
@@ -72,6 +89,7 @@ def create_feature(text, nrange=(1, 1)):
     text_punc = re.sub('[a-z0-9]', ' ', text)
     text_features += ngram(text_punc.split(), 1)
     return Counter(text_features)
+
 
 # calling function
 main()
