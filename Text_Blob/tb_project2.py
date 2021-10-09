@@ -63,7 +63,7 @@ def train_model():
 def main():
     trained = train_model()
 
-    emoji_dict = {"joy":"😂", "fear":"😱", "anger":"😠", "sadness":"😢", "disgust":"😒", "shame":"😳", "guilt":"😳"}
+    emoji_dict = {"joy":"😀", "fear":"😱", "anger":"😣", "sadness":"😭", "disgust":"🤮", "shame":"😨", "guilt":"🥺"}
     t1 = "This looks so impressive"
     t2 = "I have a fear of dogs"
     t3 = "My dog died yesterday"
@@ -74,8 +74,6 @@ def main():
         features = create_feature(text, nrange=(1, 4))
         features = trained[0].transform(features)
         prediction = trained[1].predict(features)[0]
-        # features = vectorizer.transform(features)
-        # prediction = lsvc.predict(features)[0]
         print( text,emoji_dict[prediction])
 
 main()
