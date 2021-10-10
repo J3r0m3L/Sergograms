@@ -29,7 +29,7 @@ body {
     font-size: 24px;
 }
 
-body > h1 {
+#dropdown > h1 {
     font-size: 28px;
     font-family: 'Noto Sans Mono', monospace;
     text-align: center;
@@ -44,7 +44,7 @@ input[type="checkbox"] {
     background-color: #c6c6c6;
     outline: none;
     border-radius: 20px;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, .2)
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, .2);
     transition: .25s;
 }
 
@@ -79,4 +79,15 @@ input:checked[type="checkbox"]:before {
 .history > h1 {
     margin: 40px 0 0 0;
     font-size: 24px;
+}
+
+#dropdown {
+    display: none;
+    transition: .5s;
+}
+
+#dropdown.active {
+    display: flex;
+    flex-direction: column;
+    transition: .5s;
 }

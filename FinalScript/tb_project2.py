@@ -60,7 +60,7 @@ def train_model():
     return [vectorizer, lsvc]
 
 # utilize model
-def main():
+def brain():
     trained = train_model()
 
     emoji_dict = {"joy":"😀", "fear":"😱", "anger":"😣", "sadness":"😭", "disgust":"🤮", "shame":"😨", "guilt":"🥺"}
@@ -76,5 +76,3 @@ def main():
         features = trained[0].transform(features)
         prediction = trained[1].predict(features)[0]
         print( text,emoji_dict[prediction])
-
-main()

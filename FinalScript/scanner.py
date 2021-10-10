@@ -7,6 +7,8 @@ import time
 import re
 from collections import Counter
 import joblib
+import eel
+
 
 toggle = 1
 def main():
@@ -21,6 +23,8 @@ def main():
         emoji_dict = {"joy": "😂", "fear": "😱", "anger": "😠",
                       "sadness": "😢", "disgust": "😒", "shame": "😳", "guilt": "😳"}
         appstate = "Discord"
+
+
         # loop begins
         while(True):
             # prevents the output of / key due to its function as a toggle button
@@ -71,6 +75,7 @@ def main():
                     keyboard.write('😳')
                 elif prediction == 'guilt':
                     keyboard.write('😳')
+            eel.sleep(1.0)
 
 
 # toggle variable
@@ -100,3 +105,4 @@ def create_feature(text, nrange=(1, 1)):
     text_punc = re.sub('[a-z0-9]', ' ', text)
     text_features += ngram(text_punc.split(), 1)
     return Counter(text_features)
+

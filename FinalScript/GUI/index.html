@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SergoGrams</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,10 +18,11 @@
         </div>
         <input type="checkbox" id="status_toggle" onclick="status();">
     </div>
-    <div class='dropdown'>
+    <div id='dropdown'>
         <h1>to use: press ctrl + enter</h1>
         <div class='history'>
             <h1>history:</h1>
+            <h1 id='test'></h1>
         </div>
     </div>
     <style>
@@ -34,13 +35,21 @@
             var status_toggle = document.getElementById('status_toggle');
             if (status_toggle.checked) {
                 document.getElementById('status').style.color = '#56E39F';
-                document.getElementById('status').innerHTML = 'active'
+                document.getElementById('status').innerHTML = 'active';
+                document.getElementById('dropdown').classList.add('active');
+                
             }
             else {
                 document.getElementById('status').style.color = '#E53D00';
-                document.getElementById('status').innerHTML = 'inactive'
+                document.getElementById('status').innerHTML = 'inactive';
+                document.getElementById('dropdown').classList.remove('active');
+                
 
             }
+        }
+        eel.expose(showHistory);
+        function showHistory(history) {
+            document.getElementById('tag-id').innerHTML = history;
         }
 
     </script>
