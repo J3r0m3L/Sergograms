@@ -5,19 +5,18 @@ import eel
 eel.init('GUI')
 eel.start('index.html', block=False)
 
-main()
 @eel.expose
 def toggle(boolean):
-    if boolean == true:
+    if boolean == 'true':
         toggleon()
         print('true_good')
-        eel.showHistory('true works')
+        # eel.showHistory('true works')
     else:
         toggleoff()
         print('false_good')
-        eel.showHistory('false works')
+        # eel.showHistory('false works')
 
-
+main()
 
 
 

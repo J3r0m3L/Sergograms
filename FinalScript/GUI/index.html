@@ -15,21 +15,21 @@
         eel.main()
         function change() {
             if (status_toggle.checked) {
-                eel.glory()
+                eel.toggle('true')
                 document.getElementById('status').style.color = '#56E39F';
                 document.getElementById('status').innerHTML = 'active';
                 document.getElementById('dropdown').classList.add('active');
             }
             else {
-                eel.glory()
+                eel.toggle('false')
                 document.getElementById('status').style.color = '#E53D00';
                 document.getElementById('status').innerHTML = 'inactive';
                 document.getElementById('dropdown').classList.remove('active');
             }
         }
-        function showHistory(history) {
-            document.getElementById('tag-id').innerHTML = history;
-        }
+        // function showHistory(history) {
+        //     document.getElementById('tag-id').innerHTML = history;
+        // }
     </script>
 </head>
 
@@ -45,15 +45,7 @@
         <h1>to use: press ctrl + enter</h1>
         <div class='history'>
             <h1>history:</h1>
-            <h1 id='test'></h1>
         </div>
     </div>
-
-    <style>
-        h2 {
-            color: #E53D00;
-        }
-    </style>
 </body>
-
 </html>

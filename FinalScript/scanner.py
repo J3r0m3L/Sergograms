@@ -9,12 +9,7 @@ import joblib
 import eel
 import sys
 
-toggleman = True
-
-
-@eel.expose
-def glory():
-    print("hey stop")
+toggleman = False
 
 @eel.expose
 def main():
@@ -30,57 +25,68 @@ def main():
                       "sadness": "😢", "disgust": "😒", "shame": "😳", "guilt": "😳"}
         appstate = "Discord"
         # loop begins
-        while(toggleman == True):
-            # prevents the output of / key due to its function as a toggle button
-            # keyboard.block_key('/')
-            # toggle says go
-            if keyboard.is_pressed('ctrl+shift'):
-                # benchmark time after keypress
-                # start_time = time.time()
-                # default discord text area
-                final = {"top": 975, "left": 375, "width": 840, "height": 40}
-                # one screenshot to find the program
-                fullimg = pytesseract.image_to_string(cv2.cvtColor(
-                    nm.array(sct.grab(monitor)), cv2.COLOR_BGR2GRAY), lang='eng')
-                # facebook check
-                if 'Messenger' in fullimg:
-                    # fb text area
-                    appstate = "Facebook Messenger"
-                    final = {"top": 1000, "left": 448,
-                             "width": 992, "height": 23}
-                # whatsapp check
-                elif 'WhatsApp' in fullimg:
-                    # whatsapp text area
-                    appstate = "WhatsApp"
-                    final = {"top": 995, "left": 693,
-                             "width": 1142, "height": 30}
-                # analyzes the typed text visually using tesseract
-                txtstr = pytesseract.image_to_string(cv2.cvtColor(
-                    nm.array(sct.grab(final)), cv2.COLOR_BGR2GRAY), lang='eng')
-                # algorithm for creating emoji prediction
-                features = create_feature(txtstr, nrange=(1, 4))
-                features = trained[0].transform(features)
-                prediction = trained[1].predict(features)[0]
-                # prints text, emoji, time taken
-                print('->', appstate, '| Message: ',
-                      txtstr, " ", emoji_dict[prediction])
-                # put the emoji into your chat along with a spacer character.
-                keyboard.press('space')
-                print(toggleman)
-                if prediction == 'joy':
-                    keyboard.write('😂')
-                elif prediction == 'fear':
-                    keyboard.write('😱')
-                elif prediction == 'anger':
-                    keyboard.write('😠')
-                elif prediction == 'sadness':
-                    keyboard.write('😢')
-                elif prediction == 'disgust':
-                    keyboard.write('😒')
-                elif prediction == 'shame':
-                    keyboard.write('😳')
-                elif prediction == 'guilt':
-                    keyboard.write('😳')
+        while(True):
+            if (toggleman == True):
+                # prevents the output of / key due to its function as a toggle button
+                # keyboard.block_key('/')
+                # toggle says go
+                if keyboard.is_pressed('ctrl+shift'):
+                    # benchmark time after keypress
+                    # start_time = time.time()
+                    # default discord text area
+                    final = {"top": 975, "left": 375, "width": 840, "height": 40}
+                    # one screenshot to find the program
+                    fullimg = pytesseract.image_to_string(cv2.cvtColor(
+                        nm.array(sct.grab(monitor)), cv2.COLOR_BGR2GRAY), lang='eng')
+                    # facebook check
+                    if 'Messenger' in fullimg:
+                        # fb text area
+                        appstate = "Facebook Messenger"
+                        final = {"top": 1000, "left": 448,
+                                "width": 992, "height": 23}
+                    # whatsapp check
+                    elif 'WhatsApp' in fullimg:
+                        # whatsapp text area
+                        appstate = "WhatsApp"
+                        final = {"top": 995, "left": 693,
+                                "width": 1142, "height": 30}
+                    # analyzes the typed text visually using tesseract
+                    txtstr = pytesseract.image_to_string(cv2.cvtColor(
+                        nm.array(sct.grab(final)), cv2.COLOR_BGR2GRAY), lang='eng')
+                    # algorithm for creating emoji prediction
+                    features = create_feature(txtstr, nrange=(1, 4))
+                    features = trained[0].transform(features)
+                    prediction = trained[1].predict(features)[0]
+                    # prints text, emoji, time taken
+                    print('->', appstate, '| Message: ',
+                        txtstr, " ", emoji_dict[prediction])
+                    # put the emoji into your chat along with a spacer character.
+                    keyboard.press('space')
+                    if prediction == 'joy':
+                        keyboard.write('😂')
+                    elif prediction == 'fear':
+                        keyboard.write('😱')
+                    elif prediction == 'anger':
+                        keyboard.write('😠')
+                    elif prediction == 'sadness':
+                        keyboard.write('😢')
+                    elif prediction == 'disgust':
+                        keyboard.write('😒')
+                    elif prediction == 'shame':
+                        keyboard.write('😳')
+                    elif prediction == 'guilt':
+                        keyboard.write('😳')
+            eel.sleep(0.5)
+
+# toggleman on
+def toggleon():
+    global toggleman
+    toggleman = True
+
+# toggleman off
+def toggleoff():
+    global toggleman
+    toggleman = False
 
 # helpermethod for tokenization
 def ngram(token, n):
@@ -101,5 +107,3 @@ def create_feature(text, nrange=(1, 1)):
     text_features += ngram(text_punc.split(), 1)
     return Counter(text_features)
 
-eel.init("GUI")
-eel.start("index.html")
