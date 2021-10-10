@@ -8,6 +8,7 @@ import re
 from collections import Counter
 import joblib
 
+toggle = 1
 def main():
     with mss.mss() as sct:
         # path of image to text scanner
@@ -19,14 +20,15 @@ def main():
         # supported emotions
         emoji_dict = {"joy": "😂", "fear": "😱", "anger": "😠",
                       "sadness": "😢", "disgust": "😒", "shame": "😳", "guilt": "😳"}
+        appstate = "Discord"
         # loop begins
         while(True):
             # prevents the output of / key due to its function as a toggle button
             # keyboard.block_key('/')
             # toggle says go
-            if keyboard.is_pressed('ctrl+enter'):
+            if keyboard.is_pressed('ctrl+enter') and toggle > 0:
                 # benchmark time after keypress
-                start_time = time.time()
+                # start_time = time.time()
                 # default discord text area
                 final = {"top": 975, "left": 375, "width": 840, "height": 40}
                 # one screenshot to find the program
@@ -35,11 +37,13 @@ def main():
                 # facebook check
                 if 'Facebook' in fullimg:
                     # fb text area
+                    appstate = "Facebook Messenger"
                     final = {"top": 1000, "left": 448,
                              "width": 992, "height": 23}
                 # whatsapp check
                 elif 'WhatsApp' in fullimg:
                     # whatsapp text area
+                    appstate = "WhatsApp"
                     final = {"top": 995, "left": 693,
                              "width": 1142, "height": 30}
                 # analyzes the typed text visually using tesseract
@@ -50,8 +54,7 @@ def main():
                 features = trained[0].transform(features)
                 prediction = trained[1].predict(features)[0]
                 # prints text, emoji, time taken
-                print(txtstr, emoji_dict[prediction], 'The loop took: {0}'.format(
-                    time.time()-start_time))
+                print('->', appstate, '| Message: ', txtstr, " ", emoji_dict[prediction])
                 # put the emoji into your chat along with a spacer character.
                 keyboard.press('space')
                 if prediction == 'joy':
@@ -68,6 +71,14 @@ def main():
                     keyboard.write('😳')
                 elif prediction == 'guilt':
                     keyboard.write('😳')
+
+
+# toggle variable
+def toggleoff():
+    toggle = -1
+
+def toggleon():
+    toggle = 0
 
 
 # helpermethod for tokenization
@@ -89,7 +100,3 @@ def create_feature(text, nrange=(1, 1)):
     text_punc = re.sub('[a-z0-9]', ' ', text)
     text_features += ngram(text_punc.split(), 1)
     return Counter(text_features)
-
-
-# calling function
-main()
