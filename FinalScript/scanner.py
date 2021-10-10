@@ -7,10 +7,9 @@ import re
 from collections import Counter
 import joblib
 import eel
-import sys
 
-hist_events = []
 toggleman = False
+
 
 @eel.expose
 def main():
@@ -35,7 +34,8 @@ def main():
                     # benchmark time after keypress
                     # start_time = time.time()
                     # default discord text area
-                    final = {"top": 975, "left": 375, "width": 840, "height": 40}
+                    final = {"top": 975, "left": 375,
+                             "width": 840, "height": 40}
                     # one screenshot to find the program
                     fullimg = pytesseract.image_to_string(cv2.cvtColor(
                         nm.array(sct.grab(monitor)), cv2.COLOR_BGR2GRAY), lang='eng')
@@ -44,13 +44,13 @@ def main():
                         # fb text area
                         appstate = "Facebook Messenger"
                         final = {"top": 1000, "left": 448,
-                                "width": 992, "height": 23}
+                                 "width": 992, "height": 23}
                     # whatsapp check
                     elif 'WhatsApp' in fullimg:
                         # whatsapp text area
                         appstate = "WhatsApp"
                         final = {"top": 995, "left": 693,
-                                "width": 1142, "height": 30}
+                                 "width": 1142, "height": 30}
                     # analyzes the typed text visually using tesseract
                     txtstr = pytesseract.image_to_string(cv2.cvtColor(
                         nm.array(sct.grab(final)), cv2.COLOR_BGR2GRAY), lang='eng')
@@ -59,10 +59,10 @@ def main():
                     features = trained[0].transform(features)
                     prediction = trained[1].predict(features)[0]
                     # prints text, emoji, time taken
-                    print(appstate, ' | ', txtstr, " ", emoji_dict[prediction])
-                    historic_event = str(appstate + ' | ' + txtstr + ' ' + emoji_dict[prediction])
-                    hist_events.append(historic_event)
-                    eel.showHistory(hist_events)
+                    print('->', appstate, '| Message: ',
+                          txtstr, " ", emoji_dict[prediction])
+                    eel.addHistory(
+                        '> {} | Message: {} {}'.format(appstate, txtstr, emoji_dict[prediction]))
                     # put the emoji into your chat along with a spacer character.
                     keyboard.press('space')
                     if prediction == 'joy':
@@ -82,16 +82,22 @@ def main():
             eel.sleep(0.05)
 
 # toggleman on
+
+
 def toggleon():
     global toggleman
     toggleman = True
 
 # toggleman off
+
+
 def toggleoff():
     global toggleman
     toggleman = False
 
 # helpermethod for tokenization
+
+
 def ngram(token, n):
     output = []
     for i in range(n-1, len(token)):
@@ -100,6 +106,8 @@ def ngram(token, n):
     return output
 
 # helper method for sentiment analysis
+
+
 def create_feature(text, nrange=(1, 1)):
     text_features = []
     text = text.lower()
@@ -109,4 +117,3 @@ def create_feature(text, nrange=(1, 1)):
     text_punc = re.sub('[a-z0-9]', ' ', text)
     text_features += ngram(text_punc.split(), 1)
     return Counter(text_features)
-

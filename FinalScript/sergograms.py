@@ -10,9 +10,11 @@ def toggle(boolean):
     if boolean == 'true':
         toggleon()
         print('true_good')
+        # eel.showHistory('true works')
     else:
         toggleoff()
         print('false_good')
+        # eel.showHistory('false works')
 
 main()
 
