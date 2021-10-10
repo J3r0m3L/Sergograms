@@ -26,10 +26,16 @@
                 document.getElementById('status').innerHTML = 'inactive';
                 document.getElementById('dropdown').classList.remove('active');
             }
+            eel.expose(showHistory)
+            function showHistory(history) {
+               let list = document.getElementById('myList');
+               history.forEach((item) => {
+                   let li = document.createElement("li");
+                   li.innerText = item;
+                   list.appendChild(li);
+               })
+            }
         }
-        // function showHistory(history) {
-        //     document.getElementById('tag-id').innerHTML = history;
-        // }
     </script>
 </head>
 
@@ -45,6 +51,7 @@
         <h1>to use: press ctrl + enter</h1>
         <div class='history'>
             <h1>history:</h1>
+            <ul id='myList'></ul>
         </div>
     </div>
 </body>

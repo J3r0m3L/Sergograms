@@ -9,6 +9,7 @@ import joblib
 import eel
 import sys
 
+hist_events = []
 toggleman = False
 
 @eel.expose
@@ -58,8 +59,10 @@ def main():
                     features = trained[0].transform(features)
                     prediction = trained[1].predict(features)[0]
                     # prints text, emoji, time taken
-                    print('->', appstate, '| Message: ',
-                        txtstr, " ", emoji_dict[prediction])
+                    print(appstate, ' | ', txtstr, " ", emoji_dict[prediction])
+                    historic_event = str(appstate + ' | ' + txtstr + ' ' + emoji_dict[prediction])
+                    hist_events.append(historic_event)
+                    eel.showHistory(hist_events)
                     # put the emoji into your chat along with a spacer character.
                     keyboard.press('space')
                     if prediction == 'joy':
@@ -76,7 +79,7 @@ def main():
                         keyboard.write('😳')
                     elif prediction == 'guilt':
                         keyboard.write('😳')
-            eel.sleep(0.5)
+            eel.sleep(0.05)
 
 # toggleman on
 def toggleon():
