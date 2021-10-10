@@ -3,14 +3,20 @@ import pytesseract
 import cv2
 import mss
 import keyboard
-import time
 import re
 from collections import Counter
 import joblib
 import eel
+import sys
+
+toggleman = True
 
 
-toggle = 1
+@eel.expose
+def glory():
+    print("hey stop")
+
+@eel.expose
 def main():
     with mss.mss() as sct:
         # path of image to text scanner
@@ -23,14 +29,12 @@ def main():
         emoji_dict = {"joy": "😂", "fear": "😱", "anger": "😠",
                       "sadness": "😢", "disgust": "😒", "shame": "😳", "guilt": "😳"}
         appstate = "Discord"
-
-
         # loop begins
-        while(True):
+        while(toggleman == True):
             # prevents the output of / key due to its function as a toggle button
             # keyboard.block_key('/')
             # toggle says go
-            if keyboard.is_pressed('ctrl+enter') and toggle > 0:
+            if keyboard.is_pressed('ctrl+shift'):
                 # benchmark time after keypress
                 # start_time = time.time()
                 # default discord text area
@@ -39,7 +43,7 @@ def main():
                 fullimg = pytesseract.image_to_string(cv2.cvtColor(
                     nm.array(sct.grab(monitor)), cv2.COLOR_BGR2GRAY), lang='eng')
                 # facebook check
-                if 'Facebook' in fullimg:
+                if 'Messenger' in fullimg:
                     # fb text area
                     appstate = "Facebook Messenger"
                     final = {"top": 1000, "left": 448,
@@ -58,9 +62,11 @@ def main():
                 features = trained[0].transform(features)
                 prediction = trained[1].predict(features)[0]
                 # prints text, emoji, time taken
-                print('->', appstate, '| Message: ', txtstr, " ", emoji_dict[prediction])
+                print('->', appstate, '| Message: ',
+                      txtstr, " ", emoji_dict[prediction])
                 # put the emoji into your chat along with a spacer character.
                 keyboard.press('space')
+                print(toggleman)
                 if prediction == 'joy':
                     keyboard.write('😂')
                 elif prediction == 'fear':
@@ -75,16 +81,6 @@ def main():
                     keyboard.write('😳')
                 elif prediction == 'guilt':
                     keyboard.write('😳')
-            eel.sleep(1.0)
-
-
-# toggle variable
-def toggleoff():
-    toggle = -1
-
-def toggleon():
-    toggle = 0
-
 
 # helpermethod for tokenization
 def ngram(token, n):
@@ -93,7 +89,6 @@ def ngram(token, n):
         ngram = ' '.join(token[i-n+1:i+1])
         output.append(ngram)
     return output
-
 
 # helper method for sentiment analysis
 def create_feature(text, nrange=(1, 1)):
@@ -106,3 +101,5 @@ def create_feature(text, nrange=(1, 1)):
     text_features += ngram(text_punc.split(), 1)
     return Counter(text_features)
 
+eel.init("GUI")
+eel.start("index.html")

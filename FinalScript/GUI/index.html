@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,14 +10,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap" rel="stylesheet">
+    <script src="eel.js"></script>
+    <script>
+        eel.main()
+        function change() {
+            if (status_toggle.checked) {
+                eel.glory()
+                document.getElementById('status').style.color = '#56E39F';
+                document.getElementById('status').innerHTML = 'active';
+                document.getElementById('dropdown').classList.add('active');
+            }
+            else {
+                eel.glory()
+                document.getElementById('status').style.color = '#E53D00';
+                document.getElementById('status').innerHTML = 'inactive';
+                document.getElementById('dropdown').classList.remove('active');
+            }
+        }
+        function showHistory(history) {
+            document.getElementById('tag-id').innerHTML = history;
+        }
+    </script>
 </head>
+
 <body>
     <div class='head'>
         <div class='sub_head'>
             <h1>status:</h1>
             <h2 id='status'>inactive</h2>
         </div>
-        <input type="checkbox" id="status_toggle" onclick="status();">
+        <input type="checkbox" id="status_toggle" onclick="change()">
     </div>
     <div id='dropdown'>
         <h1>to use: press ctrl + enter</h1>
@@ -25,33 +48,12 @@
             <h1 id='test'></h1>
         </div>
     </div>
+
     <style>
         h2 {
             color: #E53D00;
         }
     </style>
-    <script>
-        function status() {
-            var status_toggle = document.getElementById('status_toggle');
-            if (status_toggle.checked) {
-                document.getElementById('status').style.color = '#56E39F';
-                document.getElementById('status').innerHTML = 'active';
-                document.getElementById('dropdown').classList.add('active');
-                
-            }
-            else {
-                document.getElementById('status').style.color = '#E53D00';
-                document.getElementById('status').innerHTML = 'inactive';
-                document.getElementById('dropdown').classList.remove('active');
-                
-
-            }
-        }
-        eel.expose(showHistory);
-        function showHistory(history) {
-            document.getElementById('tag-id').innerHTML = history;
-        }
-
-    </script>
 </body>
+
 </html>
